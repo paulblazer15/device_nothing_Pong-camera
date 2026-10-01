@@ -1,0 +1,9 @@
+{
+    global:
+        _ZN7android17OfflineProcClientC1Ev;
+        _ZN7android17OfflineProcClient11setListenerERKNS_2spINS_25OfflineProcClientListenerEEE;
+        _ZN7android8hardware17OfflineParametersC1ENSt3__16vectorIP13native_handleNS2_9allocatorIS5_EEEES8_NS3_IiNS6_IiEEEESA_;
+        _ZN7android8hardware19IOfflineProcService11asInterfaceERKNS_2spINS_7IBinderEEE;
+        _ZTVN7android8hardware17OfflineParametersE;
+    local: *;
+};

@@ -1,0 +1,13 @@
+soong_namespace {}
+
+cc_library_shared {
+    name: "libofflineproc_shim",
+    srcs: ["shim/offlineproc_shim.cpp"],
+    system_ext_specific: true,
+    compile_multilib: "64",
+    shared_libs: [
+        "libbinder",
+        "libutils",
+    ],
+    version_script: "shim/exports.map",
+}

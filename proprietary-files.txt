@@ -1,0 +1,22 @@
+## All proprietary files from this list, unless pinned and noted otherwise,
+## are from Nothing Phone (2) (B4.1-260818-1726).
+
+# Camera app and permissions
+system_ext/priv-app/NTCamera/NTCamera.apk;OVERRIDES=Aperture,Camera2
+system/lib64/libnelib.so
+system_ext/lib64/libofflineproc_jni.so
+system_ext/etc/permissions/privapp-permissions-NTCamera.xml
+system/etc/sysconfig/nothing-hiddenapi-package-allowlist.xml
+
+# Nothing Camera service
+system_ext/etc/permissions/com.nothing.feature_qcom.xml
+vendor/bin/hw/vendor.noth.hardware.camera-service
+vendor/etc/init/vendor.noth.hardware.camera-service.rc
+vendor/etc/permissions/com.nothing.features_vnd.xml
+vendor/etc/vintf/manifest/vendor.noth.hardware.camera-service.xml
+vendor/lib64/vendor.noth.hardware.camera-service-impl.so
+vendor/lib64/vendor.noth.hardware.camera-V1-ndk_platform.so
+
+# Nothing Feature Service
+vendor/bin/ntf-service
+vendor/etc/init/init.ntf.rc
