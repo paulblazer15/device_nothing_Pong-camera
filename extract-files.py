@@ -10,6 +10,8 @@ from extract_utils.main import ExtractUtils, ExtractUtilsModule
 
 
 blob_fixups: blob_fixups_user_type = {
+    'system_ext/priv-app/NTCamera/NTCamera.apk': blob_fixup()
+        .apktool_patch('patches'),
     'system_ext/lib64/libofflineproc_jni.so': blob_fixup()
         .add_needed('libofflineproc_shim.so'),
     'vendor/etc/init/vendor.noth.hardware.camera-service.rc': blob_fixup()

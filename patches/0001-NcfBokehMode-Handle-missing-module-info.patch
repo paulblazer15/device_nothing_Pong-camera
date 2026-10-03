@@ -1,0 +1,21 @@
+diff --git a/smali_classes4/com/nothing/camera/mode/NcfBokehMode.smali b/smali_classes4/com/nothing/camera/mode/NcfBokehMode.smali
+--- a/smali_classes4/com/nothing/camera/mode/NcfBokehMode.smali
++++ b/smali_classes4/com/nothing/camera/mode/NcfBokehMode.smali
+@@ -3505,6 +3505,8 @@
+ 
+     check-cast v2, [B
+ 
++    if-eqz v2, :cond_module_info_missing
++
+     .line 2774
+     new-instance v7, Ljava/lang/StringBuilder;
+ 
+@@ -3582,6 +3584,8 @@
+     invoke-static {v5, v1}, Lcom/nothing/common/utils/LogUtil;->d(Ljava/lang/String;Ljava/lang/String;)V
++
++    :cond_module_info_missing
+     :try_end_1
+     .catch Ljava/lang/IllegalArgumentException; {:try_start_1 .. :try_end_1} :catch_1
+ 
+     :catch_1
+     move v6, v4
