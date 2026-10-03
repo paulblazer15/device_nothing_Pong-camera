@@ -14,9 +14,7 @@ PRODUCT_PACKAGES += \
 
 # Properties
 PRODUCT_SYSTEM_EXT_PROPERTIES += \
-    persist.vendor.camera.privapp.list=com.nothing.camera \
-    ro.com.google.lens.oem_camera_package=com.nothing.camera \
-    vendor.camera.aux.packagelist=com.nothing.camera
+    ro.com.google.lens.oem_camera_package=com.nothing.camera
 
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.com.google.lens.oem_image_package=com.nothing.gallery
