@@ -1,0 +1,14 @@
+diff --git a/smali_classes5/com/nothing/common/setting/CameraDeviceInfoManager.smali b/smali_classes5/com/nothing/common/setting/CameraDeviceInfoManager.smali
+--- a/smali_classes5/com/nothing/common/setting/CameraDeviceInfoManager.smali
++++ b/smali_classes5/com/nothing/common/setting/CameraDeviceInfoManager.smali
+@@ -1380,7 +1380,9 @@
+     return p0
+ 
+     :cond_0
+-    const/4 p0, -0x1
++    invoke-virtual {p0}, Lcom/nothing/common/setting/CameraDeviceInfoManager;->getFirstBackCameraId()I
++
++    move-result p0
+ 
+     return p0
+ .end method
