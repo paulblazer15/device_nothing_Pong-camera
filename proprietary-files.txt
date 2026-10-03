@@ -11,6 +11,12 @@ system_ext/etc/permissions/privapp-permissions-NothingExperience.xml
 system_ext/etc/permissions/google-lens-permissions.xml
 system/etc/sysconfig/nothing-hiddenapi-package-allowlist.xml
 
+# Nothing Gallery
+system_ext/priv-app/NTGallery/NTGallery.apk
+system_ext/priv-app/NTGalleryMediaProxy/NTGalleryMediaProxy.apk
+system_ext/etc/permissions/gallery-google-lens-permissions.xml
+system_ext/etc/sysconfig/com.nothing.gallery.xml
+
 # Nothing Camera service
 system_ext/etc/permissions/com.nothing.feature_qcom.xml
 vendor/bin/hw/vendor.noth.hardware.camera-service

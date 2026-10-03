@@ -18,6 +18,9 @@ PRODUCT_SYSTEM_EXT_PROPERTIES += \
     ro.com.google.lens.oem_camera_package=com.nothing.camera \
     vendor.camera.aux.packagelist=com.nothing.camera
 
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.com.google.lens.oem_image_package=com.nothing.gallery
+
 # Camera
 $(call soong_config_set,camera,package_name,com.nothing.device.package_name)
 
