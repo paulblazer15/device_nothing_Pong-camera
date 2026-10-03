@@ -1,0 +1,12 @@
+diff --git a/smali_classes4/com/ape/utils/exif/ExifOutputStream.smali b/smali_classes4/com/ape/utils/exif/ExifOutputStream.smali
+--- a/smali_classes4/com/ape/utils/exif/ExifOutputStream.smali
++++ b/smali_classes4/com/ape/utils/exif/ExifOutputStream.smali
+@@ -2630,6 +2630,8 @@
+     .line 747
+     array-length p0, v0
+ 
++    if-eqz p0, :cond_1
++
+     add-int/lit8 p0, p0, -0x1
+ 
+     aput-byte v1, v0, p0
