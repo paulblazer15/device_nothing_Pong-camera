@@ -27,7 +27,7 @@ diff --git a/smali_classes5/com/nothing/common/glyph/AospGlyphLight.smali b/smal
 new file mode 100644
 --- /dev/null
 +++ b/smali_classes5/com/nothing/common/glyph/AospGlyphLight.smali
-@@ -0,0 +1,192 @@
+@@ -0,0 +1,258 @@
 +.class public final Lcom/nothing/common/glyph/AospGlyphLight;
 +.super Ljava/lang/Object;
 +.source "AospGlyphLight.java"
@@ -41,11 +41,17 @@ new file mode 100644
 +
 +.field private static final DEVICE:Ljava/lang/String; = "A065"
 +
++.field private static final ENABLE_DELAY_MS:J = 0xdcL
++
 +.field private static final FRAME_SIZE:I = 0x21
 +
 +.field private static final TAG:Ljava/lang/String; = "AospGlyphLight"
 +
 +.field private static sConnected:Z
++
++.field private static sApplyHandler:Landroid/os/Handler;
++
++.field private static sApplyRunnable:Ljava/lang/Runnable;
 +
 +.field private static sEnabled:Z
 +
@@ -136,6 +142,66 @@ new file mode 100644
 +    return-void
 +.end method
 +
++.method public static applyPending()V
++    .locals 1
++
++    sget-boolean v0, Lcom/nothing/common/glyph/AospGlyphLight;->sEnabled:Z
++
++    if-eqz v0, :cond_return
++
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++
++    :cond_return
++    return-void
++.end method
++
++.method private static scheduleApply()V
++    .locals 4
++
++    sget-object v0, Lcom/nothing/common/glyph/AospGlyphLight;->sApplyHandler:Landroid/os/Handler;
++
++    if-nez v0, :cond_handler_ready
++
++    new-instance v0, Landroid/os/Handler;
++
++    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
++
++    move-result-object v1
++
++    invoke-direct {v0, v1}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
++
++    sput-object v0, Lcom/nothing/common/glyph/AospGlyphLight;->sApplyHandler:Landroid/os/Handler;
++
++    :cond_handler_ready
++    sget-object v1, Lcom/nothing/common/glyph/AospGlyphLight;->sApplyRunnable:Ljava/lang/Runnable;
++
++    if-nez v1, :cond_runnable_ready
++
++    new-instance v1, Lcom/nothing/common/glyph/AospGlyphLight$1;
++
++    invoke-direct {v1}, Lcom/nothing/common/glyph/AospGlyphLight$1;-><init>()V
++
++    sput-object v1, Lcom/nothing/common/glyph/AospGlyphLight;->sApplyRunnable:Ljava/lang/Runnable;
++
++    :cond_runnable_ready
++    invoke-virtual {v0, v1}, Landroid/os/Handler;->removeCallbacks(Ljava/lang/Runnable;)V
++
++    sget-boolean v2, Lcom/nothing/common/glyph/AospGlyphLight;->sEnabled:Z
++
++    if-eqz v2, :cond_apply_now
++
++    const-wide/16 v2, 0xdc
++
++    invoke-virtual {v0, v1, v2, v3}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++
++    return-void
++
++    :cond_apply_now
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++
++    return-void
++.end method
++
 +.method public static setEnabled(Landroid/content/Context;Z)V
 +    .locals 2
 +
@@ -178,7 +244,7 @@ new file mode 100644
 +    return-void
 +
 +    :cond_apply
-+    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->scheduleApply()V
 +    :try_end_0
 +    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 +
@@ -206,7 +272,7 @@ new file mode 100644
 +
 +    sput-boolean p0, Lcom/nothing/common/glyph/AospGlyphLight;->sConnected:Z
 +
-+    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->scheduleApply()V
 +
 +    return-void
 +.end method
@@ -217,6 +283,36 @@ new file mode 100644
 +    const/4 p0, 0x0
 +
 +    sput-boolean p0, Lcom/nothing/common/glyph/AospGlyphLight;->sConnected:Z
++
++    return-void
++.end method
+diff --git a/smali_classes5/com/nothing/common/glyph/AospGlyphLight$1.smali b/smali_classes5/com/nothing/common/glyph/AospGlyphLight$1.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes5/com/nothing/common/glyph/AospGlyphLight$1.smali
+@@ -0,0 +1,25 @@
++.class final Lcom/nothing/common/glyph/AospGlyphLight$1;
++.super Ljava/lang/Object;
++.source "AospGlyphLight.java"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# direct methods
++.method constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++# virtual methods
++.method public run()V
++    .locals 0
++
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->applyPending()V
 +
 +    return-void
 +.end method
