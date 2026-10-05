@@ -1,0 +1,259 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -41,6 +41,7 @@
+     <uses-permission android:name="com.nothing.camera.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+     <uses-permission android:name="com.nothing.permission.BIND_CARD_SERVICE"/>
+     <application android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:backupAgent="com.nothing.camera.activity.CameraBackUpAgent" android:extractNativeLibs="false" android:fullBackupOnly="true" android:hardwareAccelerated="true" android:icon="@mipmap/ic_launcher_camera" android:label="@string/app_name" android:largeHeap="true" android:name="com.nothing.camera.app.CameraApp" android:restoreAnyVersion="true" android:roundIcon="@mipmap/ic_launcher_camera" android:supportsRtl="true">
++        <meta-data android:name="NothingKey" android:value="com.nothing.camera"/>
+         <profileable android:shell="false"/>
+         <receiver android:enabled="true" android:exported="true" android:name="com.nothing.camera.BootBroadCaseReceiver">
+             <intent-filter>
+diff --git a/smali_classes4/com/nothing/camera/activity/CameraActivity.smali b/smali_classes4/com/nothing/camera/activity/CameraActivity.smali
+--- a/smali_classes4/com/nothing/camera/activity/CameraActivity.smali
++++ b/smali_classes4/com/nothing/camera/activity/CameraActivity.smali
+@@ -4469,6 +4469,10 @@
+ .method protected onPause()V
+     .locals 7
+ 
++    const/4 v0, 0x0
++
++    invoke-static {p0, v0}, Lcom/nothing/common/glyph/AospGlyphLight;->setEnabled(Landroid/content/Context;Z)V
++
+     .line 945
+     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onPause()V
+ 
+diff --git a/smali_classes5/com/nothing/common/glyph/AospGlyphLight.smali b/smali_classes5/com/nothing/common/glyph/AospGlyphLight.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes5/com/nothing/common/glyph/AospGlyphLight.smali
+@@ -0,0 +1,192 @@
++.class public final Lcom/nothing/common/glyph/AospGlyphLight;
++.super Ljava/lang/Object;
++.source "AospGlyphLight.java"
++
++# interfaces
++.implements Lcom/nothing/ketchum/GlyphManager$Callback;
++
++
++# static fields
++.field private static final BRIGHTNESS:I = 0xfff
++
++.field private static final DEVICE:Ljava/lang/String; = "A065"
++
++.field private static final FRAME_SIZE:I = 0x21
++
++.field private static final TAG:Ljava/lang/String; = "AospGlyphLight"
++
++.field private static sConnected:Z
++
++.field private static sEnabled:Z
++
++.field private static sInstance:Lcom/nothing/common/glyph/AospGlyphLight;
++
++.field private static sManager:Lcom/nothing/ketchum/GlyphManager;
++
++
++# direct methods
++.method private constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static apply()V
++    .locals 3
++
++    sget-boolean v0, Lcom/nothing/common/glyph/AospGlyphLight;->sConnected:Z
++
++    if-eqz v0, :cond_return
++
++    sget-object v0, Lcom/nothing/common/glyph/AospGlyphLight;->sManager:Lcom/nothing/ketchum/GlyphManager;
++
++    if-eqz v0, :cond_return
++
++    :try_start_0
++    const-string v1, "A065"
++
++    invoke-virtual {v0, v1}, Lcom/nothing/ketchum/GlyphManager;->register(Ljava/lang/String;)Z
++
++    sget-boolean v1, Lcom/nothing/common/glyph/AospGlyphLight;->sEnabled:Z
++
++    if-eqz v1, :cond_disable
++
++    invoke-virtual {v0}, Lcom/nothing/ketchum/GlyphManager;->openSession()V
++
++    const/16 v1, 0x21
++
++    new-array v1, v1, [I
++
++    const/16 v2, 0xfff
++
++    invoke-static {v1, v2}, Ljava/util/Arrays;->fill([II)V
++
++    invoke-virtual {v0, v1}, Lcom/nothing/ketchum/GlyphManager;->setFrameColors([I)V
++
++    const-string v0, "AospGlyphLight"
++
++    const-string v1, "Glyph fill light enabled"
++
++    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    goto :goto_done
++
++    :cond_disable
++    const/16 v1, 0x21
++
++    new-array v1, v1, [I
++
++    invoke-virtual {v0, v1}, Lcom/nothing/ketchum/GlyphManager;->setFrameColors([I)V
++
++    invoke-virtual {v0}, Lcom/nothing/ketchum/GlyphManager;->closeSession()V
++
++    const-string v0, "AospGlyphLight"
++
++    const-string v1, "Glyph fill light disabled"
++
++    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    :goto_done
++    return-void
++
++    :catch_0
++    move-exception v0
++
++    const-string v1, "AospGlyphLight"
++
++    const-string v2, "Unable to update Glyph fill light"
++
++    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :cond_return
++    return-void
++.end method
++
++.method public static setEnabled(Landroid/content/Context;Z)V
++    .locals 2
++
++    sget-boolean v0, Lcom/nothing/common/glyph/AospGlyphLight;->sEnabled:Z
++
++    if-ne v0, p1, :cond_changed
++
++    sget-object v0, Lcom/nothing/common/glyph/AospGlyphLight;->sManager:Lcom/nothing/ketchum/GlyphManager;
++
++    if-nez v0, :cond_return
++
++    if-eqz p1, :cond_return
++
++    :cond_changed
++    sput-boolean p1, Lcom/nothing/common/glyph/AospGlyphLight;->sEnabled:Z
++
++    :try_start_0
++    sget-object p1, Lcom/nothing/common/glyph/AospGlyphLight;->sManager:Lcom/nothing/ketchum/GlyphManager;
++
++    if-nez p1, :cond_apply
++
++    new-instance p1, Lcom/nothing/common/glyph/AospGlyphLight;
++
++    invoke-direct {p1}, Lcom/nothing/common/glyph/AospGlyphLight;-><init>()V
++
++    sput-object p1, Lcom/nothing/common/glyph/AospGlyphLight;->sInstance:Lcom/nothing/common/glyph/AospGlyphLight;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
++
++    move-result-object p0
++
++    invoke-static {p0}, Lcom/nothing/ketchum/GlyphManager;->getInstance(Landroid/content/Context;)Lcom/nothing/ketchum/GlyphManager;
++
++    move-result-object p0
++
++    sput-object p0, Lcom/nothing/common/glyph/AospGlyphLight;->sManager:Lcom/nothing/ketchum/GlyphManager;
++
++    invoke-virtual {p0, p1}, Lcom/nothing/ketchum/GlyphManager;->init(Lcom/nothing/ketchum/GlyphManager$Callback;)V
++
++    return-void
++
++    :cond_apply
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    return-void
++
++    :catch_0
++    move-exception p0
++
++    const-string p1, "AospGlyphLight"
++
++    const-string v0, "Unable to initialize Glyph fill light"
++
++    invoke-static {p1, v0, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :cond_return
++    return-void
++.end method
++
++
++# virtual methods
++.method public onServiceConnected(Landroid/content/ComponentName;)V
++    .locals 0
++
++    const/4 p0, 0x1
++
++    sput-boolean p0, Lcom/nothing/common/glyph/AospGlyphLight;->sConnected:Z
++
++    invoke-static {}, Lcom/nothing/common/glyph/AospGlyphLight;->apply()V
++
++    return-void
++.end method
++
++.method public onServiceDisconnected(Landroid/content/ComponentName;)V
++    .locals 0
++
++    const/4 p0, 0x0
++
++    sput-boolean p0, Lcom/nothing/common/glyph/AospGlyphLight;->sConnected:Z
++
++    return-void
++.end method
+diff --git a/smali_classes5/com/nothing/common/setting/SettingApplier.smali b/smali_classes5/com/nothing/common/setting/SettingApplier.smali
+--- a/smali_classes5/com/nothing/common/setting/SettingApplier.smali
++++ b/smali_classes5/com/nothing/common/setting/SettingApplier.smali
+@@ -10520,6 +10520,16 @@
+ 
+     invoke-virtual {v2, v0, v4}, Landroid/hardware/camera2/CaptureRequest$Builder;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
++    iget-object v0, v1, Lcom/nothing/common/setting/SettingApplier;->mSettingContext:Lcom/nothing/common/setting/SettingContext;
++
++    invoke-virtual {v0}, Lcom/nothing/common/setting/SettingContext;->getApplicationContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    const/4 v6, 0x1
++
++    invoke-static {v0, v6}, Lcom/nothing/common/glyph/AospGlyphLight;->setEnabled(Landroid/content/Context;Z)V
++
+     .line 1363
+     const-string v0, "setCaptureRequestBuilderValue: NT_LED_ENABLE=1"
+ 
+@@ -10551,6 +10561,16 @@
+ 
+     invoke-virtual {v2, v0, v15}, Landroid/hardware/camera2/CaptureRequest$Builder;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
++    iget-object v0, v1, Lcom/nothing/common/setting/SettingApplier;->mSettingContext:Lcom/nothing/common/setting/SettingContext;
++
++    invoke-virtual {v0}, Lcom/nothing/common/setting/SettingContext;->getApplicationContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    const/4 v6, 0x0
++
++    invoke-static {v0, v6}, Lcom/nothing/common/glyph/AospGlyphLight;->setEnabled(Landroid/content/Context;Z)V
++
+     .line 1367
+     const-string v0, "setCaptureRequestBuilderValue: NT_LED_ENABLE=0"
+ 
