@@ -1,5 +1,5 @@
-allow platform_app hal_nt_camera_aidl_service:service_manager find;
-binder_call(platform_app, hal_camera_default)
+allow platform_app_all hal_nt_camera_aidl_service:service_manager find;
+binder_call(platform_app_all, hal_camera_default)
 
-get_prop(platform_app, vendor_camera_prop)
-allow platform_app adsprpcd_file:dir { getattr search };
+get_prop(platform_app_all, vendor_camera_prop)
+allow platform_app_all adsprpcd_file:dir { getattr search };
