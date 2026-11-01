@@ -1,5 +1,5 @@
 ## All proprietary files from this list, unless pinned and noted otherwise,
-## are from Nothing Phone (2) (B4.1-260818-1726).
+## are from Nothing Phone (2) (B4.1-261014-1615).
 
 # Camera app and permissions
 system_ext/priv-app/NTCamera/NTCamera.apk;OVERRIDES=Aperture,Camera2
